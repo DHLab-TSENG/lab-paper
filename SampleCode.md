@@ -152,23 +152,89 @@ timeSeriesData <- getTimeSeriesLab(labData = loincSample,
                                    indexDate = first,
                                    gapDate = 30,
                                    completeWindows = TRUE)
-head(timeSeriesData)
+timeSeriesData[timeSeriesData$ID==36&timeSeriesData$LOINC=="2160-0"]
 ```
 
-    ##    ID  LOINC                          LABEL Window Count Max Min Mean Nearest
-    ## 1: 36 1742-6 Alanine Aminotransferase (ALT)      1     2  12   8   10       8
-    ## 2: 36 1742-6 Alanine Aminotransferase (ALT)      2    NA  NA  NA   NA      NA
-    ## 3: 36 1742-6 Alanine Aminotransferase (ALT)      3    NA  NA  NA   NA      NA
-    ## 4: 36 1742-6 Alanine Aminotransferase (ALT)      4    NA  NA  NA   NA      NA
-    ## 5: 36 1742-6 Alanine Aminotransferase (ALT)      5    NA  NA  NA   NA      NA
-    ## 6: 36 1742-6 Alanine Aminotransferase (ALT)      6    NA  NA  NA   NA      NA
-    ##    firstRecord lastRecode
-    ## 1:  2131-04-30 2131-05-17
-    ## 2:        <NA>       <NA>
-    ## 3:        <NA>       <NA>
-    ## 4:        <NA>       <NA>
-    ## 5:        <NA>       <NA>
-    ## 6:        <NA>       <NA>
+    ##     ID  LOINC      LABEL Window Count Max Min      Mean Nearest firstRecord
+    ##  1: 36 2160-0 Creatinine      1    23 2.0 0.7 1.2347826     1.0  2131-04-30
+    ##  2: 36 2160-0 Creatinine      2     1 1.1 1.1 1.1000000     1.1  2131-06-22
+    ##  3: 36 2160-0 Creatinine      3    NA  NA  NA        NA      NA        <NA>
+    ##  4: 36 2160-0 Creatinine      4    NA  NA  NA        NA      NA        <NA>
+    ##  5: 36 2160-0 Creatinine      5    NA  NA  NA        NA      NA        <NA>
+    ##  6: 36 2160-0 Creatinine      6    NA  NA  NA        NA      NA        <NA>
+    ##  7: 36 2160-0 Creatinine      7    NA  NA  NA        NA      NA        <NA>
+    ##  8: 36 2160-0 Creatinine      8    NA  NA  NA        NA      NA        <NA>
+    ##  9: 36 2160-0 Creatinine      9     2 1.2 1.2 1.2000000     1.2  2132-01-09
+    ## 10: 36 2160-0 Creatinine     10     2 1.1 1.1 1.1000000     1.1  2132-02-07
+    ## 11: 36 2160-0 Creatinine     11    NA  NA  NA        NA      NA        <NA>
+    ## 12: 36 2160-0 Creatinine     12    NA  NA  NA        NA      NA        <NA>
+    ## 13: 36 2160-0 Creatinine     13    NA  NA  NA        NA      NA        <NA>
+    ## 14: 36 2160-0 Creatinine     14    NA  NA  NA        NA      NA        <NA>
+    ## 15: 36 2160-0 Creatinine     15    NA  NA  NA        NA      NA        <NA>
+    ## 16: 36 2160-0 Creatinine     16    NA  NA  NA        NA      NA        <NA>
+    ## 17: 36 2160-0 Creatinine     17    NA  NA  NA        NA      NA        <NA>
+    ## 18: 36 2160-0 Creatinine     18    NA  NA  NA        NA      NA        <NA>
+    ## 19: 36 2160-0 Creatinine     19    NA  NA  NA        NA      NA        <NA>
+    ## 20: 36 2160-0 Creatinine     20    NA  NA  NA        NA      NA        <NA>
+    ## 21: 36 2160-0 Creatinine     21    NA  NA  NA        NA      NA        <NA>
+    ## 22: 36 2160-0 Creatinine     22    NA  NA  NA        NA      NA        <NA>
+    ## 23: 36 2160-0 Creatinine     23    NA  NA  NA        NA      NA        <NA>
+    ## 24: 36 2160-0 Creatinine     24    NA  NA  NA        NA      NA        <NA>
+    ## 25: 36 2160-0 Creatinine     25    NA  NA  NA        NA      NA        <NA>
+    ## 26: 36 2160-0 Creatinine     26    NA  NA  NA        NA      NA        <NA>
+    ## 27: 36 2160-0 Creatinine     27    NA  NA  NA        NA      NA        <NA>
+    ## 28: 36 2160-0 Creatinine     28    NA  NA  NA        NA      NA        <NA>
+    ## 29: 36 2160-0 Creatinine     29    NA  NA  NA        NA      NA        <NA>
+    ## 30: 36 2160-0 Creatinine     30    NA  NA  NA        NA      NA        <NA>
+    ## 31: 36 2160-0 Creatinine     31    NA  NA  NA        NA      NA        <NA>
+    ## 32: 36 2160-0 Creatinine     32    NA  NA  NA        NA      NA        <NA>
+    ## 33: 36 2160-0 Creatinine     33    NA  NA  NA        NA      NA        <NA>
+    ## 34: 36 2160-0 Creatinine     34    NA  NA  NA        NA      NA        <NA>
+    ## 35: 36 2160-0 Creatinine     35    NA  NA  NA        NA      NA        <NA>
+    ## 36: 36 2160-0 Creatinine     36    NA  NA  NA        NA      NA        <NA>
+    ## 37: 36 2160-0 Creatinine     37     3 1.0 0.9 0.9666667     1.0  2134-05-11
+    ## 38: 36 2160-0 Creatinine     38     6 1.0 0.8 0.8500000     0.9  2134-05-14
+    ##     ID  LOINC      LABEL Window Count Max Min      Mean Nearest firstRecord
+    ##     lastRecode
+    ##  1: 2131-05-25
+    ##  2: 2131-06-22
+    ##  3:       <NA>
+    ##  4:       <NA>
+    ##  5:       <NA>
+    ##  6:       <NA>
+    ##  7:       <NA>
+    ##  8:       <NA>
+    ##  9: 2132-01-15
+    ## 10: 2132-02-08
+    ## 11:       <NA>
+    ## 12:       <NA>
+    ## 13:       <NA>
+    ## 14:       <NA>
+    ## 15:       <NA>
+    ## 16:       <NA>
+    ## 17:       <NA>
+    ## 18:       <NA>
+    ## 19:       <NA>
+    ## 20:       <NA>
+    ## 21:       <NA>
+    ## 22:       <NA>
+    ## 23:       <NA>
+    ## 24:       <NA>
+    ## 25:       <NA>
+    ## 26:       <NA>
+    ## 27:       <NA>
+    ## 28:       <NA>
+    ## 29:       <NA>
+    ## 30:       <NA>
+    ## 31:       <NA>
+    ## 32:       <NA>
+    ## 33:       <NA>
+    ## 34:       <NA>
+    ## 35:       <NA>
+    ## 36:       <NA>
+    ## 37: 2134-05-13
+    ## 38: 2134-05-20
+    ##     lastRecode
 
 ## Data Visualuzation
 
@@ -187,7 +253,114 @@ plot(timeSeriesPlot)
 
 ![](SampleCode_files/figure-gfm/vis-1.png)<!-- -->
 
-# Data Imputation
+``` r
+colnames(patientSample)[2]<-"ID"
+timeSeriesDataMarked <- getAbnormalMark(labData = timeSeriesData,
+                                     idColName = ID,
+                                     labItemColName = LOINC,
+                                     valueColName = Nearest,
+                                     genderColName = GENDER,
+                                     genderTable = patientSample,
+                                     referenceTable = refLOINC)
+
+timeSeriesPlotMarked <- plotTimeSeriesLab(labData = timeSeriesDataMarked,
+                                    idColName = ID,
+                                    labItemColName = LOINC + LABEL,
+                                    timeMarkColName = Window,
+                                    valueColName = Value,
+                                    timeStart = 1,
+                                    timeEnd  = 5,
+                                    abnormalMarkColName = ABMark)
+
+plot(timeSeriesPlotMarked)
+```
+
+![](SampleCode_files/figure-gfm/vis2-1.png)<!-- --> \# Data Imputation
+
+``` r
+timeSeriesData[timeSeriesData$ID==36&timeSeriesData$LOINC=="2160-0"]
+```
+
+    ##     ID  LOINC      LABEL Window Count Max Min      Mean Nearest firstRecord
+    ##  1: 36 2160-0 Creatinine      1    23 2.0 0.7 1.2347826     1.0  2131-04-30
+    ##  2: 36 2160-0 Creatinine      2     1 1.1 1.1 1.1000000     1.1  2131-06-22
+    ##  3: 36 2160-0 Creatinine      3    NA  NA  NA        NA      NA        <NA>
+    ##  4: 36 2160-0 Creatinine      4    NA  NA  NA        NA      NA        <NA>
+    ##  5: 36 2160-0 Creatinine      5    NA  NA  NA        NA      NA        <NA>
+    ##  6: 36 2160-0 Creatinine      6    NA  NA  NA        NA      NA        <NA>
+    ##  7: 36 2160-0 Creatinine      7    NA  NA  NA        NA      NA        <NA>
+    ##  8: 36 2160-0 Creatinine      8    NA  NA  NA        NA      NA        <NA>
+    ##  9: 36 2160-0 Creatinine      9     2 1.2 1.2 1.2000000     1.2  2132-01-09
+    ## 10: 36 2160-0 Creatinine     10     2 1.1 1.1 1.1000000     1.1  2132-02-07
+    ## 11: 36 2160-0 Creatinine     11    NA  NA  NA        NA      NA        <NA>
+    ## 12: 36 2160-0 Creatinine     12    NA  NA  NA        NA      NA        <NA>
+    ## 13: 36 2160-0 Creatinine     13    NA  NA  NA        NA      NA        <NA>
+    ## 14: 36 2160-0 Creatinine     14    NA  NA  NA        NA      NA        <NA>
+    ## 15: 36 2160-0 Creatinine     15    NA  NA  NA        NA      NA        <NA>
+    ## 16: 36 2160-0 Creatinine     16    NA  NA  NA        NA      NA        <NA>
+    ## 17: 36 2160-0 Creatinine     17    NA  NA  NA        NA      NA        <NA>
+    ## 18: 36 2160-0 Creatinine     18    NA  NA  NA        NA      NA        <NA>
+    ## 19: 36 2160-0 Creatinine     19    NA  NA  NA        NA      NA        <NA>
+    ## 20: 36 2160-0 Creatinine     20    NA  NA  NA        NA      NA        <NA>
+    ## 21: 36 2160-0 Creatinine     21    NA  NA  NA        NA      NA        <NA>
+    ## 22: 36 2160-0 Creatinine     22    NA  NA  NA        NA      NA        <NA>
+    ## 23: 36 2160-0 Creatinine     23    NA  NA  NA        NA      NA        <NA>
+    ## 24: 36 2160-0 Creatinine     24    NA  NA  NA        NA      NA        <NA>
+    ## 25: 36 2160-0 Creatinine     25    NA  NA  NA        NA      NA        <NA>
+    ## 26: 36 2160-0 Creatinine     26    NA  NA  NA        NA      NA        <NA>
+    ## 27: 36 2160-0 Creatinine     27    NA  NA  NA        NA      NA        <NA>
+    ## 28: 36 2160-0 Creatinine     28    NA  NA  NA        NA      NA        <NA>
+    ## 29: 36 2160-0 Creatinine     29    NA  NA  NA        NA      NA        <NA>
+    ## 30: 36 2160-0 Creatinine     30    NA  NA  NA        NA      NA        <NA>
+    ## 31: 36 2160-0 Creatinine     31    NA  NA  NA        NA      NA        <NA>
+    ## 32: 36 2160-0 Creatinine     32    NA  NA  NA        NA      NA        <NA>
+    ## 33: 36 2160-0 Creatinine     33    NA  NA  NA        NA      NA        <NA>
+    ## 34: 36 2160-0 Creatinine     34    NA  NA  NA        NA      NA        <NA>
+    ## 35: 36 2160-0 Creatinine     35    NA  NA  NA        NA      NA        <NA>
+    ## 36: 36 2160-0 Creatinine     36    NA  NA  NA        NA      NA        <NA>
+    ## 37: 36 2160-0 Creatinine     37     3 1.0 0.9 0.9666667     1.0  2134-05-11
+    ## 38: 36 2160-0 Creatinine     38     6 1.0 0.8 0.8500000     0.9  2134-05-14
+    ##     ID  LOINC      LABEL Window Count Max Min      Mean Nearest firstRecord
+    ##     lastRecode
+    ##  1: 2131-05-25
+    ##  2: 2131-06-22
+    ##  3:       <NA>
+    ##  4:       <NA>
+    ##  5:       <NA>
+    ##  6:       <NA>
+    ##  7:       <NA>
+    ##  8:       <NA>
+    ##  9: 2132-01-15
+    ## 10: 2132-02-08
+    ## 11:       <NA>
+    ## 12:       <NA>
+    ## 13:       <NA>
+    ## 14:       <NA>
+    ## 15:       <NA>
+    ## 16:       <NA>
+    ## 17:       <NA>
+    ## 18:       <NA>
+    ## 19:       <NA>
+    ## 20:       <NA>
+    ## 21:       <NA>
+    ## 22:       <NA>
+    ## 23:       <NA>
+    ## 24:       <NA>
+    ## 25:       <NA>
+    ## 26:       <NA>
+    ## 27:       <NA>
+    ## 28:       <NA>
+    ## 29:       <NA>
+    ## 30:       <NA>
+    ## 31:       <NA>
+    ## 32:       <NA>
+    ## 33:       <NA>
+    ## 34:       <NA>
+    ## 35:       <NA>
+    ## 36:       <NA>
+    ## 37: 2134-05-13
+    ## 38: 2134-05-20
+    ##     lastRecode
 
 ``` r
 fullTimeSeriesData <- imputeTimeSeriesLab(labData = timeSeriesData,
@@ -196,16 +369,50 @@ fullTimeSeriesData <- imputeTimeSeriesLab(labData = timeSeriesData,
                                    windowColName = Window,
                                    valueColName = Mean & Nearest,
                                    impMethod = NOCB)
-head(fullTimeSeriesData)
+
+fullTimeSeriesData[timeSeriesData$ID==36&timeSeriesData$LOINC=="2160-0"]
 ```
 
-    ##    ID  LOINC                          LABEL Window Mean Nearest
-    ## 1: 36 1742-6 Alanine Aminotransferase (ALT)      1   10       8
-    ## 2: 36 1742-6 Alanine Aminotransferase (ALT)      2   12      12
-    ## 3: 36 1742-6 Alanine Aminotransferase (ALT)      3   12      12
-    ## 4: 36 1742-6 Alanine Aminotransferase (ALT)      4   12      12
-    ## 5: 36 1742-6 Alanine Aminotransferase (ALT)      5   12      12
-    ## 6: 36 1742-6 Alanine Aminotransferase (ALT)      6   12      12
+    ##     ID  LOINC      LABEL Window      Mean Nearest
+    ##  1: 36 2160-0 Creatinine      1 1.2347826     1.0
+    ##  2: 36 2160-0 Creatinine      2 1.1000000     1.1
+    ##  3: 36 2160-0 Creatinine      3 1.2000000     1.2
+    ##  4: 36 2160-0 Creatinine      4 1.2000000     1.2
+    ##  5: 36 2160-0 Creatinine      5 1.2000000     1.2
+    ##  6: 36 2160-0 Creatinine      6 1.2000000     1.2
+    ##  7: 36 2160-0 Creatinine      7 1.2000000     1.2
+    ##  8: 36 2160-0 Creatinine      8 1.2000000     1.2
+    ##  9: 36 2160-0 Creatinine      9 1.2000000     1.2
+    ## 10: 36 2160-0 Creatinine     10 1.1000000     1.1
+    ## 11: 36 2160-0 Creatinine     11 0.9666667     1.0
+    ## 12: 36 2160-0 Creatinine     12 0.9666667     1.0
+    ## 13: 36 2160-0 Creatinine     13 0.9666667     1.0
+    ## 14: 36 2160-0 Creatinine     14 0.9666667     1.0
+    ## 15: 36 2160-0 Creatinine     15 0.9666667     1.0
+    ## 16: 36 2160-0 Creatinine     16 0.9666667     1.0
+    ## 17: 36 2160-0 Creatinine     17 0.9666667     1.0
+    ## 18: 36 2160-0 Creatinine     18 0.9666667     1.0
+    ## 19: 36 2160-0 Creatinine     19 0.9666667     1.0
+    ## 20: 36 2160-0 Creatinine     20 0.9666667     1.0
+    ## 21: 36 2160-0 Creatinine     21 0.9666667     1.0
+    ## 22: 36 2160-0 Creatinine     22 0.9666667     1.0
+    ## 23: 36 2160-0 Creatinine     23 0.9666667     1.0
+    ## 24: 36 2160-0 Creatinine     24 0.9666667     1.0
+    ## 25: 36 2160-0 Creatinine     25 0.9666667     1.0
+    ## 26: 36 2160-0 Creatinine     26 0.9666667     1.0
+    ## 27: 36 2160-0 Creatinine     27 0.9666667     1.0
+    ## 28: 36 2160-0 Creatinine     28 0.9666667     1.0
+    ## 29: 36 2160-0 Creatinine     29 0.9666667     1.0
+    ## 30: 36 2160-0 Creatinine     30 0.9666667     1.0
+    ## 31: 36 2160-0 Creatinine     31 0.9666667     1.0
+    ## 32: 36 2160-0 Creatinine     32 0.9666667     1.0
+    ## 33: 36 2160-0 Creatinine     33 0.9666667     1.0
+    ## 34: 36 2160-0 Creatinine     34 0.9666667     1.0
+    ## 35: 36 2160-0 Creatinine     35 0.9666667     1.0
+    ## 36: 36 2160-0 Creatinine     36 0.9666667     1.0
+    ## 37: 36 2160-0 Creatinine     37 0.9666667     1.0
+    ## 38: 36 2160-0 Creatinine     38 0.8500000     0.9
+    ##     ID  LOINC      LABEL Window      Mean Nearest
 
 # Analysis Ready Data Generation
 

@@ -98,7 +98,7 @@ timeSeriesData <- getTimeSeriesLab(labData = loincSample,
                                    indexDate = first,
                                    gapDate = 30,
                                    completeWindows = TRUE)
-head(timeSeriesData)
+timeSeriesData[timeSeriesData$ID==36&timeSeriesData$LOINC=="2160-0"]
 ```
 
 
@@ -138,18 +138,38 @@ plot(timeSeriesPlotMarked)
 ```
 # Data Imputation
 ```{r imp}
+timeSeriesData[timeSeriesData$ID==36&timeSeriesData$LOINC=="2160-0"]
+
 fullTimeSeriesData <- imputeTimeSeriesLab(labData = timeSeriesData,
                                    idColName = ID,
                                    labItemColName = LOINC + LABEL,
                                    windowColName = Window,
                                    valueColName = Mean & Nearest,
                                    impMethod = NOCB)
-head(fullTimeSeriesData)
+
+fullTimeSeriesData[timeSeriesData$ID==36&timeSeriesData$LOINC=="2160-0"]
 
 ```
 
 # Analysis Ready Data Generation
 ```{r ARD}
+wideTimeSeriesData <- wideTimeSeriesLab(labData = timeSeriesData,
+                                        idColName = ID,
+                                        labItemColName = LOINC + LABEL,
+                                        windowColName = Window,
+                                        valueColName = Nearest)
+head(wideTimeSeriesData)
+
+```
+
+```{r ARDimp}
+fullTimeSeriesData <- imputeTimeSeriesLab(labData = timeSeriesData,
+                                   idColName = ID,
+                                   labItemColName = LOINC + LABEL,
+                                   windowColName = Window,
+                                   valueColName = Nearest,
+                                   impMethod = mean)
+
 wideTimeSeriesData <- wideTimeSeriesLab(labData = fullTimeSeriesData,
                                         idColName = ID,
                                         labItemColName = LOINC + LABEL,

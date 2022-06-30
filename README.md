@@ -4,4 +4,4 @@
 
 Supplementary data of a submitted manuscript
 
-lab: An R package for generating analysis-ready data from laboratory records![image](https://user-images.githubusercontent.com/8377506/176656200-47b61561-b178-457d-8f08-68317b1a3ecd.png)
+lab: An R package for generating analysis-ready data from laboratory records

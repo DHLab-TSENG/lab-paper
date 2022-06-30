@@ -5,3 +5,5 @@
 Supplementary data of a submitted manuscript
 
 lab: An R package for generating analysis-ready data from laboratory records
+
+Package GitHub: https://github.com/DHLab-TSENG/lab

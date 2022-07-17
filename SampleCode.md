@@ -122,18 +122,20 @@ windowProportion <- plotWindowProportion(labData = loincSample,
                      dateColName = CHARTTIME,
                      indexDate = first,
                      gapDate = c(30, 90, 180, 360),
-                     topN = 5)
+                     topN = 5,
+                     studyPeriodStartDays=0,
+                     studyPeriodEndDays=360)
 
 head(windowProportion$missingData)
 ```
 
-    ##        LAB Gap Method Proportion
-    ## 1:  1742-6  30  By ID        1.0
-    ## 2:  1742-6  90  By ID        0.4
-    ## 3:  1742-6 180  By ID        0.4
-    ## 4:  1742-6 360  By ID        0.4
-    ## 5: 18262-6  30  By ID        0.6
-    ## 6: 18262-6  90  By ID        0.6
+    ##       LAB Gap        Method Proportion
+    ## 1: 1742-6  30 By Individual          0
+    ## 2: 1742-6  30 By Individual          0
+    ## 3: 1742-6  30 By Individual          0
+    ## 4: 1742-6  30 By Individual          0
+    ## 5: 1742-6  30 By Individual          0
+    ## 6: 2160-0  30 By Individual          0
 
 ``` r
 print(windowProportion$graph)
@@ -256,18 +258,18 @@ plot(timeSeriesPlot)
 ``` r
 colnames(patientSample)[2]<-"ID"
 timeSeriesDataMarked <- getAbnormalMark(labData = timeSeriesData,
-                                     idColName = ID,
-                                     labItemColName = LOINC,
-                                     valueColName = Nearest,
-                                     genderColName = GENDER,
-                                     genderTable = patientSample,
-                                     referenceTable = refLOINC)
+                                       idColName = ID,
+                                       labItemColName = LOINC,
+                                       valueColName = Nearest,
+                                       genderColName = GENDER,
+                                       genderTable = patientSample,
+                                       referenceTable = refLOINC)
 
 timeSeriesPlotMarked <- plotTimeSeriesLab(labData = timeSeriesDataMarked,
-                                    idColName = ID,
-                                    labItemColName = LOINC + LABEL,
-                                    timeMarkColName = Window,
-                                    valueColName = Value,
+                                          idColName = ID,
+                                          labItemColName = LOINC + LABEL,
+                                          timeMarkColName = Window,
+                                          valueColName = Value,
                                     timeStart = 1,
                                     timeEnd  = 5,
                                     abnormalMarkColName = ABMark)
@@ -364,59 +366,99 @@ timeSeriesData[timeSeriesData$ID==36&timeSeriesData$LOINC=="2160-0"]
 
 ``` r
 fullTimeSeriesData <- imputeTimeSeriesLab(labData = timeSeriesData,
-                                   idColName = ID,
-                                   labItemColName = LOINC + LABEL,
-                                   windowColName = Window,
-                                   valueColName = Mean & Nearest,
-                                   impMethod = NOCB)
+                                          idColName = ID,
+                                          labItemColName = LOINC + LABEL,
+                                          windowColName = Window,
+                                          valueColName = Mean & Nearest,
+                                          impMethod = NOCB,
+                                          imputeOverallMean = FALSE)
 
 fullTimeSeriesData[timeSeriesData$ID==36&timeSeriesData$LOINC=="2160-0"]
 ```
 
-    ##     ID  LOINC      LABEL Window      Mean Nearest
-    ##  1: 36 2160-0 Creatinine      1 1.2347826     1.0
-    ##  2: 36 2160-0 Creatinine      2 1.1000000     1.1
-    ##  3: 36 2160-0 Creatinine      3 1.2000000     1.2
-    ##  4: 36 2160-0 Creatinine      4 1.2000000     1.2
-    ##  5: 36 2160-0 Creatinine      5 1.2000000     1.2
-    ##  6: 36 2160-0 Creatinine      6 1.2000000     1.2
-    ##  7: 36 2160-0 Creatinine      7 1.2000000     1.2
-    ##  8: 36 2160-0 Creatinine      8 1.2000000     1.2
-    ##  9: 36 2160-0 Creatinine      9 1.2000000     1.2
-    ## 10: 36 2160-0 Creatinine     10 1.1000000     1.1
-    ## 11: 36 2160-0 Creatinine     11 0.9666667     1.0
-    ## 12: 36 2160-0 Creatinine     12 0.9666667     1.0
-    ## 13: 36 2160-0 Creatinine     13 0.9666667     1.0
-    ## 14: 36 2160-0 Creatinine     14 0.9666667     1.0
-    ## 15: 36 2160-0 Creatinine     15 0.9666667     1.0
-    ## 16: 36 2160-0 Creatinine     16 0.9666667     1.0
-    ## 17: 36 2160-0 Creatinine     17 0.9666667     1.0
-    ## 18: 36 2160-0 Creatinine     18 0.9666667     1.0
-    ## 19: 36 2160-0 Creatinine     19 0.9666667     1.0
-    ## 20: 36 2160-0 Creatinine     20 0.9666667     1.0
-    ## 21: 36 2160-0 Creatinine     21 0.9666667     1.0
-    ## 22: 36 2160-0 Creatinine     22 0.9666667     1.0
-    ## 23: 36 2160-0 Creatinine     23 0.9666667     1.0
-    ## 24: 36 2160-0 Creatinine     24 0.9666667     1.0
-    ## 25: 36 2160-0 Creatinine     25 0.9666667     1.0
-    ## 26: 36 2160-0 Creatinine     26 0.9666667     1.0
-    ## 27: 36 2160-0 Creatinine     27 0.9666667     1.0
-    ## 28: 36 2160-0 Creatinine     28 0.9666667     1.0
-    ## 29: 36 2160-0 Creatinine     29 0.9666667     1.0
-    ## 30: 36 2160-0 Creatinine     30 0.9666667     1.0
-    ## 31: 36 2160-0 Creatinine     31 0.9666667     1.0
-    ## 32: 36 2160-0 Creatinine     32 0.9666667     1.0
-    ## 33: 36 2160-0 Creatinine     33 0.9666667     1.0
-    ## 34: 36 2160-0 Creatinine     34 0.9666667     1.0
-    ## 35: 36 2160-0 Creatinine     35 0.9666667     1.0
-    ## 36: 36 2160-0 Creatinine     36 0.9666667     1.0
-    ## 37: 36 2160-0 Creatinine     37 0.9666667     1.0
-    ## 38: 36 2160-0 Creatinine     38 0.8500000     0.9
-    ##     ID  LOINC      LABEL Window      Mean Nearest
+    ##     ID  LOINC      LABEL Window      Mean Nearest imputed
+    ##  1: 36 2160-0 Creatinine      1 1.2347826     1.0   FALSE
+    ##  2: 36 2160-0 Creatinine      2 1.1000000     1.1   FALSE
+    ##  3: 36 2160-0 Creatinine      3 1.1000000     1.1    TRUE
+    ##  4: 36 2160-0 Creatinine      4 1.1000000     1.1    TRUE
+    ##  5: 36 2160-0 Creatinine      5 1.1000000     1.1    TRUE
+    ##  6: 36 2160-0 Creatinine      6 1.1000000     1.1    TRUE
+    ##  7: 36 2160-0 Creatinine      7 1.1000000     1.1    TRUE
+    ##  8: 36 2160-0 Creatinine      8 1.1000000     1.1    TRUE
+    ##  9: 36 2160-0 Creatinine      9 1.2000000     1.2   FALSE
+    ## 10: 36 2160-0 Creatinine     10 1.1000000     1.1   FALSE
+    ## 11: 36 2160-0 Creatinine     11 1.1000000     1.1    TRUE
+    ## 12: 36 2160-0 Creatinine     12 1.1000000     1.1    TRUE
+    ## 13: 36 2160-0 Creatinine     13 1.1000000     1.1    TRUE
+    ## 14: 36 2160-0 Creatinine     14 1.1000000     1.1    TRUE
+    ## 15: 36 2160-0 Creatinine     15 1.1000000     1.1    TRUE
+    ## 16: 36 2160-0 Creatinine     16 1.1000000     1.1    TRUE
+    ## 17: 36 2160-0 Creatinine     17 1.1000000     1.1    TRUE
+    ## 18: 36 2160-0 Creatinine     18 1.1000000     1.1    TRUE
+    ## 19: 36 2160-0 Creatinine     19 1.1000000     1.1    TRUE
+    ## 20: 36 2160-0 Creatinine     20 1.1000000     1.1    TRUE
+    ## 21: 36 2160-0 Creatinine     21 1.1000000     1.1    TRUE
+    ## 22: 36 2160-0 Creatinine     22 1.1000000     1.1    TRUE
+    ## 23: 36 2160-0 Creatinine     23 1.1000000     1.1    TRUE
+    ## 24: 36 2160-0 Creatinine     24 1.1000000     1.1    TRUE
+    ## 25: 36 2160-0 Creatinine     25 1.1000000     1.1    TRUE
+    ## 26: 36 2160-0 Creatinine     26 1.1000000     1.1    TRUE
+    ## 27: 36 2160-0 Creatinine     27 1.1000000     1.1    TRUE
+    ## 28: 36 2160-0 Creatinine     28 1.1000000     1.1    TRUE
+    ## 29: 36 2160-0 Creatinine     29 1.1000000     1.1    TRUE
+    ## 30: 36 2160-0 Creatinine     30 1.1000000     1.1    TRUE
+    ## 31: 36 2160-0 Creatinine     31 1.1000000     1.1    TRUE
+    ## 32: 36 2160-0 Creatinine     32 1.1000000     1.1    TRUE
+    ## 33: 36 2160-0 Creatinine     33 1.1000000     1.1    TRUE
+    ## 34: 36 2160-0 Creatinine     34 1.1000000     1.1    TRUE
+    ## 35: 36 2160-0 Creatinine     35 1.1000000     1.1    TRUE
+    ## 36: 36 2160-0 Creatinine     36 1.1000000     1.1    TRUE
+    ## 37: 36 2160-0 Creatinine     37 0.9666667     1.0   FALSE
+    ## 38: 36 2160-0 Creatinine     38 0.8500000     0.9   FALSE
+    ##     ID  LOINC      LABEL Window      Mean Nearest imputed
 
 # Analysis Ready Data Generation
 
 ``` r
+wideTimeSeriesData <- wideTimeSeriesLab(labData = timeSeriesData,
+                                        idColName = ID,
+                                        labItemColName = LOINC + LABEL,
+                                        windowColName = Window,
+                                        valueColName = Nearest)
+head(wideTimeSeriesData)
+```
+
+    ##    ID Window 1742-6_Alanine Aminotransferase (ALT)
+    ## 1: 36      1                                     8
+    ## 2: 36      2                                    NA
+    ## 3: 36      3                                    NA
+    ## 4: 36      4                                    NA
+    ## 5: 36      5                                    NA
+    ## 6: 36      6                                    NA
+    ##    18262-6_Cholesterol, LDL, Measured 2085-9_Cholesterol, HDL 2160-0_Creatinine
+    ## 1:                                 NA                      NA               1.0
+    ## 2:                                 NA                      NA               1.1
+    ## 3:                                 NA                      NA                NA
+    ## 4:                                 NA                      NA                NA
+    ## 5:                                 NA                      NA                NA
+    ## 6:                                 NA                      NA                NA
+    ##    2345-7_Glucose 718-7_Hemoglobin
+    ## 1:             98             12.6
+    ## 2:             90             11.3
+    ## 3:             NA               NA
+    ## 4:             NA               NA
+    ## 5:             NA               NA
+    ## 6:             NA               NA
+
+``` r
+fullTimeSeriesData <- imputeTimeSeriesLab(labData = timeSeriesData,
+                                          idColName = ID,
+                                          labItemColName = LOINC + LABEL,
+                                          windowColName = Window,
+                                          valueColName = Nearest,
+                                          impMethod = mean,
+                                          imputeOverallMean = FALSE)
+
 wideTimeSeriesData <- wideTimeSeriesLab(labData = fullTimeSeriesData,
                                         idColName = ID,
                                         labItemColName = LOINC + LABEL,
@@ -427,22 +469,22 @@ head(wideTimeSeriesData)
 
     ##    ID Window 1742-6_Alanine Aminotransferase (ALT)
     ## 1: 36      1                                     8
-    ## 2: 36      2                                    12
-    ## 3: 36      3                                    12
-    ## 4: 36      4                                    12
-    ## 5: 36      5                                    12
-    ## 6: 36      6                                    12
+    ## 2: 36      2                                    10
+    ## 3: 36      3                                    10
+    ## 4: 36      4                                    10
+    ## 5: 36      5                                    10
+    ## 6: 36      6                                    10
     ##    18262-6_Cholesterol, LDL, Measured 2085-9_Cholesterol, HDL 2160-0_Creatinine
-    ## 1:                                 NA                      NA               1.0
-    ## 2:                                 NA                      NA               1.1
-    ## 3:                                 NA                      NA               1.2
-    ## 4:                                 NA                      NA               1.2
-    ## 5:                                 NA                      NA               1.2
-    ## 6:                                 NA                      NA               1.2
+    ## 1:                                 NA                      NA              1.00
+    ## 2:                                 NA                      NA              1.10
+    ## 3:                                 NA                      NA              1.05
+    ## 4:                                 NA                      NA              1.05
+    ## 5:                                 NA                      NA              1.05
+    ## 6:                                 NA                      NA              1.05
     ##    2345-7_Glucose 718-7_Hemoglobin
-    ## 1:             98             12.6
-    ## 2:             90             11.3
-    ## 3:            116             14.5
-    ## 4:            116             14.5
-    ## 5:            116             14.5
-    ## 6:            116             14.5
+    ## 1:        98.0000         12.60000
+    ## 2:        90.0000         11.30000
+    ## 3:       102.1667         12.83333
+    ## 4:       102.1667         12.83333
+    ## 5:       102.1667         12.83333
+    ## 6:       102.1667         12.83333

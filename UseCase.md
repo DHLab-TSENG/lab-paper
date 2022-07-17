@@ -172,7 +172,7 @@ head(PDALabLONIC_ab)
 
 Then we need to decide a proper width of window for slicing laboratory
 records into time-series window. `plotWindowProportion` helps users
-explore the porpotion of missing values in each slicing window.
+explore the proportion of missing values in each slicing window.
 
 ``` r
 windowProportion <- plotWindowProportion(labData = PDALabLONIC,
@@ -180,8 +180,9 @@ windowProportion <- plotWindowProportion(labData = PDALabLONIC,
                      labItemColName = LABEL,
                      dateColName = CHARTTIME,
                      indexDate = first,
-                     gapDate = c(1, 3, 7, 14, 30),
-                     topN = 5)
+                     gapDate = c(1, 3, 7, 14),
+                     studyPeriodStartDays=0,
+                     studyPeriodEndDays=31)
 
 print(windowProportion$graph)
 ```
@@ -192,25 +193,25 @@ print(windowProportion$graph)
 ggplot2::ggsave("windowplot.pdf",dev="pdf",width=8,height=6)
 ```
 
-The figure shows that using 1 days window may generate large amount of
-missing records and it could affect the analysis results,.
+The figure shows that using 1 or 3 days window may generate large amount
+of missing records and it could affect the analysis results,.
 
 ``` r
 head(windowProportion$missingData)
 ```
 
-| LAB               | Gap | Method | Proportion |
-|:------------------|:----|:-------|-----------:|
-| Basophils         | 1   | By ID  |  0.6965699 |
-| Basophils         | 3   | By ID  |  0.6411609 |
-| Basophils         | 7   | By ID  |  0.5197889 |
-| Basophils         | 14  | By ID  |  0.2955145 |
-| Basophils         | 30  | By ID  |  0.1345646 |
-| Bilirubin, Direct | 1   | By ID  |  0.8865435 |
+| LAB               | Gap | Method        | Proportion |
+|:------------------|:----|:--------------|-----------:|
+| Bilirubin, Direct | 1   | By Individual |  0.0263852 |
+| Bilirubin, Direct | 1   | By Individual |  0.0263852 |
+| Bilirubin, Direct | 1   | By Individual |  0.0263852 |
+| Bilirubin, Direct | 1   | By Individual |  0.0263852 |
+| Bilirubin, Direct | 1   | By Individual |  0.0263852 |
+| Bilirubin, Direct | 1   | By Individual |  0.0263852 |
 
 ## Slice the Data into Time-series Window
 
-Based on the above figure, we choose 3-day window in this analysis.
+Based on the above figure, we choose 7-day window in this analysis.
 
 ``` r
 PDAIndex<-PDA[,c("ID","firstCaseDate")]
@@ -221,7 +222,7 @@ timeSeriesData <- getTimeSeriesLab(labData = PDALabLONIC,
                                    dateColName = CHARTTIME,
                                    valueColName = VALUENUM,
                                    indexDate = PDAIndex,
-                                   gapDate = 3,
+                                   gapDate = 7,
                                    completeWindows = TRUE)
 ```
 
@@ -231,12 +232,12 @@ head(timeSeriesData)
 
 |  ID | LOINC_CODE | LABEL               | Window | Count |  Max |  Min |       Mean | Nearest | firstRecord | lastRecode |
 |----:|:-----------|:--------------------|-------:|------:|-----:|-----:|-----------:|--------:|:------------|:-----------|
-|  72 | 1968-7     | Bilirubin, Direct   |      1 |     3 |  0.3 |  0.2 |  0.2666667 |     0.3 | 2163-09-23  | 2163-09-24 |
-|  72 | 1968-7     | Bilirubin, Direct   |      2 |     2 |  0.4 |  0.4 |  0.4000000 |     0.4 | 2163-09-26  | 2163-09-27 |
-|  72 | 1968-7     | Bilirubin, Direct   |      3 |     2 |  0.7 |  0.4 |  0.5500000 |     0.4 | 2163-09-28  | 2163-09-29 |
-|  72 | 1971-1     | Bilirubin, Indirect |      1 |     3 |  5.9 |  3.3 |  4.8333333 |     5.3 | 2163-09-23  | 2163-09-24 |
-|  72 | 1971-1     | Bilirubin, Indirect |      2 |     2 | 12.6 | 10.3 | 11.4500000 |    10.3 | 2163-09-26  | 2163-09-27 |
-|  72 | 1971-1     | Bilirubin, Indirect |      3 |     2 | 13.1 | 12.2 | 12.6500000 |    12.2 | 2163-09-28  | 2163-09-29 |
+|  72 | 1968-7     | Bilirubin, Direct   |      1 |     6 |  0.4 |  0.2 |  0.3333333 |     0.3 | 2163-09-23  | 2163-09-28 |
+|  72 | 1968-7     | Bilirubin, Direct   |      2 |     1 |  0.7 |  0.7 |  0.7000000 |     0.7 | 2163-09-29  | 2163-09-29 |
+|  72 | 1971-1     | Bilirubin, Indirect |      1 |     6 | 12.6 |  3.3 |  8.2666667 |     5.3 | 2163-09-23  | 2163-09-28 |
+|  72 | 1971-1     | Bilirubin, Indirect |      2 |     1 | 13.1 | 13.1 | 13.1000000 |    13.1 | 2163-09-29  | 2163-09-29 |
+|  72 | 1975-2     | Bilirubin, Total    |      1 |     6 | 13.0 |  3.5 |  8.6000000 |     5.6 | 2163-09-23  | 2163-09-28 |
+|  72 | 1975-2     | Bilirubin, Total    |      2 |     1 | 13.8 | 13.8 | 13.8000000 |    13.8 | 2163-09-29  | 2163-09-29 |
 
 ## Time-series Window Visualization
 
@@ -282,11 +283,11 @@ head(WideTimeSeriesData)
 |  ID | Window | 1968-7_Bilirubin, Direct | 1971-1_Bilirubin, Indirect | 1975-2_Bilirubin, Total | 4544-3_Hematocrit | 704-7_Basophils | 711-2_Eosinophils | 718-7_Hemoglobin | 731-0_Lymphocytes | 742-7_Monocytes | 761-7_Neutrophils | 777-3_Platelet Count | 785-6_MCH | 786-4_MCHC | 787-2_MCV | 788-0_RDW | 789-8_Red Blood Cells | 804-5_White Blood Cells |
 |----:|-------:|-------------------------:|---------------------------:|------------------------:|------------------:|----------------:|------------------:|-----------------:|------------------:|----------------:|------------------:|---------------------:|----------:|-----------:|----------:|----------:|----------------------:|------------------------:|
 |  72 |      1 |                      0.3 |                        5.3 |                     5.6 |              47.1 |               0 |                 4 |             15.9 |                73 |               4 |                56 |                  160 |      34.1 |       34.7 |        98 |      16.7 |                  4.09 |                    15.4 |
-|  72 |      2 |                      0.4 |                       10.3 |                    10.7 |              31.0 |              NA |                NA |               NA |                NA |              NA |                NA |                   NA |        NA |         NA |        NA |        NA |                    NA |                      NA |
-|  72 |      3 |                      0.4 |                       12.2 |                    12.6 |                NA |              NA |                NA |               NA |                NA |              NA |                NA |                   NA |        NA |         NA |        NA |        NA |                    NA |                      NA |
+|  72 |      2 |                      0.7 |                       13.1 |                    13.8 |                NA |              NA |                NA |               NA |                NA |              NA |                NA |                   NA |        NA |         NA |        NA |        NA |                    NA |                      NA |
 |  93 |      1 |                      0.2 |                        3.2 |                     3.4 |              40.3 |               1 |                 0 |             14.4 |                26 |               8 |                61 |                  268 |      38.6 |       35.6 |       108 |      15.2 |                  3.72 |                    16.8 |
-|  93 |      2 |                      0.2 |                        2.9 |                     3.1 |              27.9 |               1 |                 0 |              9.5 |                15 |               9 |                74 |                  347 |      37.5 |       34.0 |       110 |      16.4 |                  2.53 |                    36.5 |
-|  93 |      3 |                      0.4 |                        1.3 |                     1.7 |                NA |              NA |                NA |               NA |                NA |              NA |                NA |                   NA |        NA |         NA |        NA |        NA |                    NA |                      NA |
+|  93 |      2 |                      0.4 |                        1.3 |                     1.7 |              25.9 |              NA |                NA |               NA |                NA |              NA |                NA |                   NA |        NA |         NA |        NA |        NA |                    NA |                      NA |
+|  93 |      3 |                      0.3 |                        2.0 |                     2.3 |              34.7 |               0 |                 0 |             10.7 |                41 |              10 |                49 |                  391 |      32.9 |       33.9 |        97 |      15.7 |                  3.26 |                    17.9 |
+|  93 |      4 |                       NA |                         NA |                      NA |                NA |              NA |                NA |               NA |                NA |              NA |                NA |                   NA |        NA |         NA |        NA |        NA |                    NA |                      NA |
 
 ## Compare Laboratory Results between PDA and non-PDA groups
 
@@ -323,22 +324,22 @@ write.csv(t1p,"t1p.csv")
 
 |                                     | N              | Y              | p     | test |
 |:------------------------------------|:---------------|:---------------|:------|:-----|
-| n                                   | 358            | 12             |       |      |
-| 1975-2_Bilirubin, Total (mean (SD)) | 4.61 (2.12)    | 2.47 (1.21)    | 0.001 |      |
-| 4544-3_Hematocrit (mean (SD))       | 46.62 (6.48)   | 43.68 (7.21)   | 0.125 |      |
-| 704-7_Basophils (mean (SD))         | 0.23 (0.55)    | 0.33 (0.65)    | 0.540 |      |
-| 711-2_Eosinophils (mean (SD))       | 1.82 (2.03)    | 1.42 (1.62)    | 0.491 |      |
-| 718-7_Hemoglobin (mean (SD))        | 15.55 (2.23)   | 14.71 (2.13)   | 0.199 |      |
-| 731-0_Lymphocytes (mean (SD))       | 54.88 (20.18)  | 55.51 (20.16)  | 0.916 |      |
-| 742-7_Monocytes (mean (SD))         | 7.55 (4.48)    | 10.25 (4.37)   | 0.040 |      |
-| 761-7_Neutrophils (mean (SD))       | 31.92 (18.41)  | 28.80 (16.61)  | 0.563 |      |
-| 777-3_Platelet Count (mean (SD))    | 236.19 (81.86) | 226.50 (73.40) | 0.686 |      |
-| 785-6_MCH (mean (SD))               | 37.96 (2.58)   | 40.29 (1.82)   | 0.002 |      |
-| 786-4_MCHC (mean (SD))              | 33.31 (1.00)   | 33.37 (1.20)   | 0.842 |      |
-| 787-2_MCV (mean (SD))               | 114.08 (8.04)  | 121.00 (7.66)  | 0.004 |      |
-| 788-0_RDW (mean (SD))               | 17.05 (1.42)   | 16.68 (1.83)   | 0.377 |      |
+| n                                   | 367            | 12             |       |      |
+| 1975-2_Bilirubin, Total (mean (SD)) | 4.87 (2.50)    | 2.47 (1.21)    | 0.001 |      |
+| 4544-3_Hematocrit (mean (SD))       | 46.67 (6.49)   | 43.68 (7.21)   | 0.119 |      |
+| 704-7_Basophils (mean (SD))         | 0.23 (0.55)    | 0.33 (0.65)    | 0.543 |      |
+| 711-2_Eosinophils (mean (SD))       | 1.85 (2.06)    | 1.42 (1.62)    | 0.469 |      |
+| 718-7_Hemoglobin (mean (SD))        | 15.55 (2.23)   | 14.71 (2.13)   | 0.197 |      |
+| 731-0_Lymphocytes (mean (SD))       | 54.68 (20.25)  | 55.51 (20.16)  | 0.889 |      |
+| 742-7_Monocytes (mean (SD))         | 7.55 (4.47)    | 10.25 (4.37)   | 0.040 |      |
+| 761-7_Neutrophils (mean (SD))       | 32.11 (18.49)  | 28.80 (16.61)  | 0.542 |      |
+| 777-3_Platelet Count (mean (SD))    | 236.71 (82.48) | 226.50 (73.40) | 0.673 |      |
+| 785-6_MCH (mean (SD))               | 37.95 (2.57)   | 40.29 (1.82)   | 0.002 |      |
+| 786-4_MCHC (mean (SD))              | 33.31 (1.00)   | 33.37 (1.20)   | 0.855 |      |
+| 787-2_MCV (mean (SD))               | 114.03 (8.05)  | 121.00 (7.66)  | 0.003 |      |
+| 788-0_RDW (mean (SD))               | 17.07 (1.48)   | 16.68 (1.83)   | 0.372 |      |
 | 789-8_Red Blood Cells (mean (SD))   | 4.11 (0.60)    | 3.66 (0.57)    | 0.011 |      |
-| 804-5_White Blood Cells (mean (SD)) | 10.15 (7.15)   | 7.33 (3.94)    | 0.175 |      |
+| 804-5_White Blood Cells (mean (SD)) | 10.19 (7.15)   | 7.33 (3.94)    | 0.170 |      |
 
 ## Missing Value Imputation
 
@@ -353,21 +354,22 @@ fullTimeSeriesData <- imputeTimeSeriesLab(labData = timeSeriesData,
                                    labItemColName = LOINC_CODE + LABEL,
                                    windowColName = Window,
                                    valueColName = Mean & Nearest,
-                                   impMethod = NOCB)
+                                   impMethod = NOCB,
+                                   imputeOverallMean = FALSE)
 ```
 
 ``` r
 head(fullTimeSeriesData)
 ```
 
-|  ID | LOINC_CODE | LABEL               | Window |       Mean | Nearest |
-|----:|:-----------|:--------------------|-------:|-----------:|--------:|
-|  72 | 1968-7     | Bilirubin, Direct   |      1 |  0.2666667 |     0.3 |
-|  72 | 1968-7     | Bilirubin, Direct   |      2 |  0.4000000 |     0.4 |
-|  72 | 1968-7     | Bilirubin, Direct   |      3 |  0.5500000 |     0.4 |
-|  72 | 1971-1     | Bilirubin, Indirect |      1 |  4.8333333 |     5.3 |
-|  72 | 1971-1     | Bilirubin, Indirect |      2 | 11.4500000 |    10.3 |
-|  72 | 1971-1     | Bilirubin, Indirect |      3 | 12.6500000 |    12.2 |
+|  ID | LOINC_CODE | LABEL               | Window |       Mean | Nearest | imputed |
+|----:|:-----------|:--------------------|-------:|-----------:|--------:|:--------|
+|  72 | 1968-7     | Bilirubin, Direct   |      1 |  0.3333333 |     0.3 | FALSE   |
+|  72 | 1968-7     | Bilirubin, Direct   |      2 |  0.7000000 |     0.7 | FALSE   |
+|  72 | 1971-1     | Bilirubin, Indirect |      1 |  8.2666667 |     5.3 | FALSE   |
+|  72 | 1971-1     | Bilirubin, Indirect |      2 | 13.1000000 |    13.1 | FALSE   |
+|  72 | 1975-2     | Bilirubin, Total    |      1 |  8.6000000 |     5.6 | FALSE   |
+|  72 | 1975-2     | Bilirubin, Total    |      2 | 13.8000000 |    13.8 | FALSE   |
 
 After imputation, we can convert the records into wide format to
 generate the analysis read data.
@@ -387,11 +389,11 @@ head(FullWideTimeSeriesData)
 |  ID | Window | 1968-7_Bilirubin, Direct | 1971-1_Bilirubin, Indirect | 1975-2_Bilirubin, Total | 4544-3_Hematocrit | 704-7_Basophils | 711-2_Eosinophils | 718-7_Hemoglobin | 731-0_Lymphocytes | 742-7_Monocytes | 761-7_Neutrophils | 777-3_Platelet Count | 785-6_MCH | 786-4_MCHC | 787-2_MCV | 788-0_RDW | 789-8_Red Blood Cells | 804-5_White Blood Cells |
 |----:|-------:|-------------------------:|---------------------------:|------------------------:|------------------:|----------------:|------------------:|-----------------:|------------------:|----------------:|------------------:|---------------------:|----------:|-----------:|----------:|----------:|----------------------:|------------------------:|
 |  72 |      1 |                      0.3 |                        5.3 |                     5.6 |              47.1 |               0 |                 4 |             15.9 |                73 |               4 |                56 |                  160 |      34.1 |       34.7 |        98 |      16.7 |                  4.09 |                    15.4 |
-|  72 |      2 |                      0.4 |                       10.3 |                    10.7 |              31.0 |              NA |                NA |               NA |                NA |              NA |                NA |                   NA |        NA |         NA |        NA |        NA |                    NA |                      NA |
-|  72 |      3 |                      0.4 |                       12.2 |                    12.6 |                NA |              NA |                NA |               NA |                NA |              NA |                NA |                   NA |        NA |         NA |        NA |        NA |                    NA |                      NA |
+|  72 |      2 |                      0.7 |                       13.1 |                    13.8 |              47.1 |               0 |                 4 |             15.9 |                73 |               4 |                56 |                  160 |      34.1 |       34.7 |        98 |      16.7 |                  4.09 |                    15.4 |
 |  93 |      1 |                      0.2 |                        3.2 |                     3.4 |              40.3 |               1 |                 0 |             14.4 |                26 |               8 |                61 |                  268 |      38.6 |       35.6 |       108 |      15.2 |                  3.72 |                    16.8 |
-|  93 |      2 |                      0.2 |                        2.9 |                     3.1 |              27.9 |               1 |                 0 |              9.5 |                15 |               9 |                74 |                  347 |      37.5 |       34.0 |       110 |      16.4 |                  2.53 |                    36.5 |
-|  93 |      3 |                      0.4 |                        1.3 |                     1.7 |              25.9 |               0 |                 0 |             10.7 |                41 |              10 |                49 |                  391 |      32.9 |       33.9 |        97 |      15.7 |                  3.26 |                    17.9 |
+|  93 |      2 |                      0.4 |                        1.3 |                     1.7 |              25.9 |               1 |                 0 |             14.4 |                26 |               8 |                61 |                  268 |      38.6 |       35.6 |       108 |      15.2 |                  3.72 |                    16.8 |
+|  93 |      3 |                      0.3 |                        2.0 |                     2.3 |              34.7 |               0 |                 0 |             10.7 |                41 |              10 |                49 |                  391 |      32.9 |       33.9 |        97 |      15.7 |                  3.26 |                    17.9 |
+|  93 |      4 |                      0.3 |                        2.0 |                     2.3 |              34.7 |               0 |                 0 |             10.7 |                41 |              10 |                49 |                  391 |      32.9 |       33.9 |        97 |      15.7 |                  3.26 |                    17.9 |
 
 ## Deep Learning Model Development with Analysis Ready Data
 

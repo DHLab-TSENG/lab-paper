@@ -81,7 +81,9 @@ windowProportion <- plotWindowProportion(labData = loincSample,
                      dateColName = CHARTTIME,
                      indexDate = first,
                      gapDate = c(30, 90, 180, 360),
-                     topN = 5)
+                     topN = 5,
+                     studyPeriodStartDays=0,
+                     studyPeriodEndDays=360)
 
 head(windowProportion$missingData)
 print(windowProportion$graph)
@@ -118,18 +120,18 @@ plot(timeSeriesPlot)
 ```{r vis2}
 colnames(patientSample)[2]<-"ID"
 timeSeriesDataMarked <- getAbnormalMark(labData = timeSeriesData,
-                                     idColName = ID,
-                                     labItemColName = LOINC,
-                                     valueColName = Nearest,
-                                     genderColName = GENDER,
-                                     genderTable = patientSample,
-                                     referenceTable = refLOINC)
+                                       idColName = ID,
+                                       labItemColName = LOINC,
+                                       valueColName = Nearest,
+                                       genderColName = GENDER,
+                                       genderTable = patientSample,
+                                       referenceTable = refLOINC)
 
 timeSeriesPlotMarked <- plotTimeSeriesLab(labData = timeSeriesDataMarked,
-                                    idColName = ID,
-                                    labItemColName = LOINC + LABEL,
-                                    timeMarkColName = Window,
-                                    valueColName = Value,
+                                          idColName = ID,
+                                          labItemColName = LOINC + LABEL,
+                                          timeMarkColName = Window,
+                                          valueColName = Value,
                                     timeStart = 1,
                                     timeEnd  = 5,
                                     abnormalMarkColName = ABMark)
@@ -141,11 +143,12 @@ plot(timeSeriesPlotMarked)
 timeSeriesData[timeSeriesData$ID==36&timeSeriesData$LOINC=="2160-0"]
 
 fullTimeSeriesData <- imputeTimeSeriesLab(labData = timeSeriesData,
-                                   idColName = ID,
-                                   labItemColName = LOINC + LABEL,
-                                   windowColName = Window,
-                                   valueColName = Mean & Nearest,
-                                   impMethod = NOCB)
+                                          idColName = ID,
+                                          labItemColName = LOINC + LABEL,
+                                          windowColName = Window,
+                                          valueColName = Mean & Nearest,
+                                          impMethod = NOCB,
+                                          imputeOverallMean = FALSE)
 
 fullTimeSeriesData[timeSeriesData$ID==36&timeSeriesData$LOINC=="2160-0"]
 
@@ -162,13 +165,15 @@ head(wideTimeSeriesData)
 
 ```
 
+
 ```{r ARDimp}
 fullTimeSeriesData <- imputeTimeSeriesLab(labData = timeSeriesData,
-                                   idColName = ID,
-                                   labItemColName = LOINC + LABEL,
-                                   windowColName = Window,
-                                   valueColName = Nearest,
-                                   impMethod = mean)
+                                          idColName = ID,
+                                          labItemColName = LOINC + LABEL,
+                                          windowColName = Window,
+                                          valueColName = Nearest,
+                                          impMethod = mean,
+                                          imputeOverallMean = FALSE)
 
 wideTimeSeriesData <- wideTimeSeriesLab(labData = fullTimeSeriesData,
                                         idColName = ID,

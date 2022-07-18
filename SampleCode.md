@@ -46,7 +46,9 @@ head(mapSample)
 ## LONIC Mapping
 
 ``` r
-loincSample <- mapLOINC(labData = labSample, labItemColName = ITEMID, mappingTable = mapSample)
+loincSample <- mapLOINC(labData = labSample, 
+                        labItemColName = ITEMID, 
+                        mappingTable = mapSample)
 loincSample[loincSample$SUBJECT_ID==36&loincSample$CHARTTIME=="2131-05-17",]
 ```
 
@@ -117,14 +119,13 @@ head(caseCreatinine)
 
 ``` r
 windowProportion <- plotWindowProportion(labData = loincSample,
-                     idColName = SUBJECT_ID,
-                     labItemColName = LOINC,
-                     dateColName = CHARTTIME,
-                     indexDate = first,
-                     gapDate = c(30, 90, 180, 360),
-                     topN = 5,
-                     studyPeriodStartDays=0,
-                     studyPeriodEndDays=360)
+                                         idColName = SUBJECT_ID,
+                                         labItemColName = LOINC,
+                                         dateColName = CHARTTIME,
+                                         indexDate = first,
+                                         gapDate = c(30, 90, 180, 360),
+                                         studyPeriodStartDays=0,
+                                         studyPeriodEndDays=360)
 
 head(windowProportion$missingData)
 ```
@@ -258,21 +259,21 @@ plot(timeSeriesPlot)
 ``` r
 colnames(patientSample)[2]<-"ID"
 timeSeriesDataMarked <- getAbnormalMark(labData = timeSeriesData,
-                                       idColName = ID,
-                                       labItemColName = LOINC,
-                                       valueColName = Nearest,
-                                       genderColName = GENDER,
-                                       genderTable = patientSample,
-                                       referenceTable = refLOINC)
+                                        idColName = ID,
+                                        labItemColName = LOINC,
+                                        valueColName = Nearest,
+                                        genderColName = GENDER,
+                                        genderTable = patientSample,
+                                        referenceTable = refLOINC)
 
 timeSeriesPlotMarked <- plotTimeSeriesLab(labData = timeSeriesDataMarked,
                                           idColName = ID,
                                           labItemColName = LOINC + LABEL,
                                           timeMarkColName = Window,
                                           valueColName = Value,
-                                    timeStart = 1,
-                                    timeEnd  = 5,
-                                    abnormalMarkColName = ABMark)
+                                          timeStart = 1,
+                                          timeEnd  = 5,
+                                          abnormalMarkColName = ABMark)
 
 plot(timeSeriesPlotMarked)
 ```

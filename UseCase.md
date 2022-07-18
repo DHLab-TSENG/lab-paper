@@ -145,12 +145,12 @@ if(!"LOINC_CODE" %in% colnames(refLOINC)){
   refLOINC<-rename(refLOINC,LOINC_CODE=LOINC)
 }
 PDALabLONIC_ab <- getAbnormalMark(labData = PDALabLONIC,
-                                     idColName = SUBJECT_ID,
-                                     labItemColName = LOINC_CODE,
-                                     valueColName = VALUENUM,
-                                     genderColName = GENDER,
-                                     genderTable = Patients,
-                                     referenceTable = refLOINC)
+                                  idColName = SUBJECT_ID,
+                                  labItemColName = LOINC_CODE,
+                                  valueColName = VALUENUM,
+                                  genderColName = GENDER,
+                                  genderTable = Patients,
+                                  referenceTable = refLOINC)
 ```
 
 ``` r
@@ -175,14 +175,16 @@ records into time-series window. `plotWindowProportion` helps users
 explore the proportion of missing values in each slicing window.
 
 ``` r
+PDAIndex<-PDA[,c("ID","firstCaseDate")]
+colnames(PDAIndex)<-c("ID","indexDate")
 windowProportion <- plotWindowProportion(labData = PDALabLONIC,
-                     idColName = SUBJECT_ID,
-                     labItemColName = LABEL,
-                     dateColName = CHARTTIME,
-                     indexDate = first,
-                     gapDate = c(1, 3, 7, 14),
-                     studyPeriodStartDays=0,
-                     studyPeriodEndDays=31)
+                                         idColName = SUBJECT_ID,
+                                         labItemColName = LABEL,
+                                         dateColName = CHARTTIME,
+                                         indexDate = PDAIndex,
+                                         gapDate = c(1, 3, 7, 14),
+                                         studyPeriodStartDays=0,
+                                         studyPeriodEndDays=31)
 
 print(windowProportion$graph)
 ```
@@ -190,7 +192,7 @@ print(windowProportion$graph)
 ![](UseCase_files/figure-gfm/window-1.png)<!-- -->
 
 ``` r
-ggplot2::ggsave("windowplot.pdf",dev="pdf",width=8,height=6)
+ggplot2::ggsave("windowplot.pdf",dev="pdf",width=9,height=7)
 ```
 
 The figure shows that using 1 or 3 days window may generate large amount
@@ -214,8 +216,6 @@ head(windowProportion$missingData)
 Based on the above figure, we choose 7-day window in this analysis.
 
 ``` r
-PDAIndex<-PDA[,c("ID","firstCaseDate")]
-colnames(PDAIndex)<-c("ID","indexDate")
 timeSeriesData <- getTimeSeriesLab(labData = PDALabLONIC,
                                    idColName = SUBJECT_ID,
                                    labItemColName = LOINC_CODE + LABEL,
@@ -313,8 +313,8 @@ different between PDA and non-PDA groups.
 
 ``` r
 t1<-tableone::CreateTableOne(data=PDAandLab %>% filter(Window==1),
-                         strata = c("D30"),
-                        var=var)
+                             strata = c("D30"),
+                             var=var)
 ```
 
 ``` r
@@ -350,12 +350,12 @@ with `imputeTimeSeriesLab`.
 
 ``` r
 fullTimeSeriesData <- imputeTimeSeriesLab(labData = timeSeriesData,
-                                   idColName = ID,
-                                   labItemColName = LOINC_CODE + LABEL,
-                                   windowColName = Window,
-                                   valueColName = Mean & Nearest,
-                                   impMethod = NOCB,
-                                   imputeOverallMean = FALSE)
+                                          idColName = ID,
+                                          labItemColName = LOINC_CODE + LABEL,
+                                          windowColName = Window,
+                                          valueColName = Mean & Nearest,
+                                          impMethod = NOCB,
+                                          imputeOverallMean = FALSE)
 ```
 
 ``` r
@@ -376,10 +376,10 @@ generate the analysis read data.
 
 ``` r
 FullWideTimeSeriesData <- wideTimeSeriesLab(labData = fullTimeSeriesData,
-                                        idColName = ID,
-                                        labItemColName = LOINC_CODE+ LABEL,
-                                        windowColName = Window,
-                                        valueColName = Nearest)
+                                            idColName = ID,
+                                            labItemColName = LOINC_CODE+ LABEL,
+                                            windowColName = Window,
+                                            valueColName = Nearest)
 ```
 
 ``` r

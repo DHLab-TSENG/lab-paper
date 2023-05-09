@@ -75,7 +75,10 @@ if(file.exists("newborn/PDALab.rds")){
 LONICMap<-fread("newborn/D_LABITEMS.csv")
 LONICMap<-LONICMap %>% select(-ROW_ID)
 Patients<-fread("newborn/PATIENTS.csv")
+PDAPatients<-Patients[SUBJECT_ID %in% PDA$ID]
+saveRDS(PDAPatients,"newborn/PDAPatients.rds")
 Patients<-Patients %>% select(-ROW_ID)
+
 PDA<-inner_join(PDA,Patients,by=c("ID"="SUBJECT_ID"))
 PDA$DeathDay<-difftime(PDA$DOD_HOSP,PDA$firstCaseDate,units = "days")
 PDA$D30<-ifelse(PDA$DeathDay<=30,"Y","N")
@@ -289,7 +292,7 @@ head(WideTimeSeriesData)
 |  93 |      3 |                      0.3 |                        2.0 |                     2.3 |              34.7 |               0 |                 0 |             10.7 |                41 |              10 |                49 |                  391 |      32.9 |       33.9 |        97 |      15.7 |                  3.26 |                    17.9 |
 |  93 |      4 |                       NA |                         NA |                      NA |                NA |              NA |                NA |               NA |                NA |              NA |                NA |                   NA |        NA |         NA |        NA |        NA |                    NA |                      NA |
 
-## Compare Laboratory Results between PDA and non-PDA groups
+## Compare Laboratory Results based on 30-day in-hospital mortality
 
 ``` r
 PDAandLab<-
@@ -308,8 +311,9 @@ var
     ## [15] "804-5_White Blood Cells"
 
 We can compare laboratory results in selected window (for example, 1)
-between PDA and non-PDA groups. As the table shown, some results were
-different between PDA and non-PDA groups.
+between with and without 30-day in-hospital mortality groups. As the
+table shown, some results were different between with and without 30-day
+in-hospital mortality groups.
 
 ``` r
 t1<-tableone::CreateTableOne(data=PDAandLab %>% filter(Window==1),
@@ -401,27 +405,30 @@ Window =5
 
 ``` r
 FullPDALab<-
-  inner_join(PDA,FullWideTimeSeriesData,by="ID")[1:378,]
+  inner_join(PDA,FullWideTimeSeriesData,by="ID")
+FullPDALab<-FullPDALab %>% filter(ID!=72)
 TrainData<-FullPDALab %>% 
-  filter(Window>0&Window<=5) %>% select(ID,Window,20:34)
+  filter(Window>0&Window<=5) %>% select(ID,Window,18:34)
 TrainDataFill <- TrainData %>%
   tidyr::complete(ID, Window)
 TrainDataFill<-TrainDataFill%>%replace(is.na(.), 0)
+TrainDataFill<-TrainDataFill %>% arrange(Window,ID)
 pureTrain<-TrainDataFill %>% select(-ID,-Window)
+nPatient<-length(unique(TrainDataFill$ID))
 TrainArray<-array(unlist(pureTrain),
-                  dim=c(378,5,15))
-TrainTarget<-FullPDALab %>% select(ID,D30) %>% 
-  unique() %>% pull(D30) 
+                  dim=c(nPatient,5,17))
+TrainTarget<-FullPDALab %>% arrange(ID) %>% select(ID,D30) %>% 
+  unique() %>% pull(D30)
 TrainTarget<-array(ifelse(TrainTarget=="Y",1,0))
 TrainTargetFinal<-
   array(rep(TrainTarget,5),
-        dim=c(378,5,1))
+        dim=c(nPatient,5,1))
 library(keras)
 
 model <- keras_model_sequential()
 model %>%
         layer_lstm(16, 
-                   batch_input_shape = c(126, 5, 15),
+                   batch_input_shape = c(126, 5, 17),
                    return_sequences =TRUE, stateful= TRUE,
                    kernel_regularizer = regularizer_l2(0.001)) %>%
         layer_dropout(rate=0) %>%

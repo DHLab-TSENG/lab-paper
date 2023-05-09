@@ -144,6 +144,10 @@ print(windowProportion$graph)
 
 ![](SampleCode_files/figure-gfm/window-1.png)<!-- -->
 
+``` r
+ggplot2::ggsave("Figure2.pdf",dev="pdf",width=8, height=5)
+```
+
 ## Slicing Data into Time-series Windows
 
 ``` r
@@ -255,6 +259,10 @@ plot(timeSeriesPlot)
 ```
 
 ![](SampleCode_files/figure-gfm/vis-1.png)<!-- -->
+
+``` r
+ggplot2::ggsave("Figure3.pdf",dev="pdf",width=8, height=5)
+```
 
 ``` r
 colnames(patientSample)[2]<-"ID"

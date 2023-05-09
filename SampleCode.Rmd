@@ -88,6 +88,7 @@ windowProportion <- plotWindowProportion(labData = loincSample,
 
 head(windowProportion$missingData)
 print(windowProportion$graph)
+ggplot2::ggsave("Figure2.pdf",dev="pdf",width=8, height=5)
 ```
 
 ## Slicing Data into Time-series Windows
@@ -117,6 +118,7 @@ timeSeriesPlot <- plotTimeSeriesLab(labData = timeSeriesData,
                                     abnormalMarkColName = NULL)
 
 plot(timeSeriesPlot)
+ggplot2::ggsave("Figure3.pdf",dev="pdf",width=8, height=5)
 ```
 ```{r vis2}
 colnames(patientSample)[2]<-"ID"
